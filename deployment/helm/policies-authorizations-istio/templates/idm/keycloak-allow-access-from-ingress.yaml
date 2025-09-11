@@ -1,0 +1,118 @@
+{{- if eq .Values.idm.enabled true }}
+{{/* Allows the Mesh incoming requests to access Keycloak in the IDM Namespace */}}
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: keycloak-allow-access-from-ingress
+  labels:
+    component: mesh
+spec:
+  selector:
+    matchLabels:
+      app: keycloak
+  action: ALLOW
+  rules:
+    - to:
+      # Rule that everyone can get the certs from the realm to validate the tokens
+      - operation:
+          methods: ["GET"]
+          paths: [
+            "/realms/LAB/protocol/openid-connect/certs",
+            "/realms/HOSPITAL/protocol/openid-connect/certs",
+            "/realms/OEGD/protocol/openid-connect/certs",
+            "/realms/PORTAL/protocol/openid-connect/certs",
+            "/realms/PORTAL/.well-known/openid-configuration",
+            "/realms/INSTITUTIONS-TI/protocol/openid-connect/certs",
+            "/realms/INSTITUTIONS-TI/.well-known/openid-configuration"
+          ]
+    - from:
+      - source:
+          principals: [
+            "cluster.local/ns/istio-system/sa/istio-ingressgateway"
+          ]
+      to:
+        - operation:
+            methods: ["DELETE", "PUT"]
+            # Required by the UI
+            paths: [
+              "/admin/*",
+              "/resources/*",
+              "/realms/master/protocol/openid-connect/*",
+              "/realms/master/login-actions/authenticate"
+            ]
+      {{- if and (eq .Values.idm.keycloak.allowList.enabled true ) (gt (len .Values.idm.keycloak.allowList.ips) 0) }}
+      {{/* Allow only defined IP Addresses */}}
+      when:
+        - key: request.headers[x-real-ip]
+          values: 
+            {{- range .Values.idm.keycloak.allowList.ips }}
+            - {{ . | quote }}
+            {{- end }}
+      {{- end }}
+    - from:
+      - source:
+          principals: [
+            "cluster.local/ns/istio-system/sa/istio-ingressgateway"
+          ]
+      to:
+        - operation:
+          # Required for admin UI
+            {{- if gt (len .Values.idm.keycloak.authDomains) 0 }}
+            hosts: 
+              {{- range .Values.idm.keycloak.authDomains }}
+              - {{ . | quote }}
+              {{- end }} 
+            {{- end }} 
+            methods: ["POST", "GET"]
+            paths: ["/*"]
+      {{- if and (eq .Values.idm.keycloak.allowList.enabled true ) (gt (len .Values.idm.keycloak.allowList.ips) 0) }}
+      {{/* Allow only defined IP Addresses */}}
+      when:
+        - key: request.headers[x-real-ip]
+          values: 
+            {{- range .Values.idm.keycloak.allowList.ips }}
+            - {{ . | quote }}
+            {{- end }}
+      {{- end }}
+    - from:
+      - source:
+          principals: [
+            "cluster.local/ns/istio-system/sa/istio-ingressgateway"
+          ]
+      to:
+        - operation:
+          # Required by portal frontend applications
+          # Required by Authenticator
+            methods: ["OPTIONS", "GET", "POST"]
+            paths: [
+              "/realms/PORTAL/*",
+              "/favicon.ico",
+              "/resources/*"
+            ]
+        {{- if gt (len .Values.idm.keycloak.appDomains) 0 }}
+        - operation:
+          # Required to fetch a token and open login screen in portal         
+            hosts: 
+              {{- range .Values.idm.keycloak.appDomains }}
+              - {{ . | quote }}
+              {{- end }}          
+            methods: ["GET", "POST"]
+            paths: ["/*"]
+        {{- end }}  
+    {{- if (eq .Values.idm.keycloak.allowList.enabled true)}}
+    {{/* Allow only defined IP Addresses */}}
+    - from:
+        - source:
+            principals: [
+              "cluster.local/ns/istio-system/sa/istio-ingressgateway"
+            ]
+      to:
+        - operation:
+            methods: ["DELETE", "GET", "POST", "PUT"]
+            paths: [
+              "/"
+            ]
+    {{/* Allow all operations for the given IPs */}}
+    {{- (include "policies-authorization-chart.allow_all_operations_for_ips" .) | indent 4 }}
+  {{- end }}
+{{- end }}

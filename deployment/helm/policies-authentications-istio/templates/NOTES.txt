@@ -1,0 +1,7 @@
+This Helm Chart creates an Istio RequestAuthentication Object that defines the rules for the authentication of services based on the evaluation of a JWT Token.
+
+The JWT Token is evaluated against a Keycloak Instace and its Address is defined in the object manifest.
+
+Issuer URL: {{ .Values.requestAuth.issuerUrl }}
+
+Keycloak Internal Service Address: {{ .Values.requestAuth.keycloakUrl }}

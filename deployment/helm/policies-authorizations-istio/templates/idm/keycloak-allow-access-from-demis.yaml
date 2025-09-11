@@ -1,0 +1,38 @@
+{{- if eq .Values.idm.enabled true }}
+{{ $gateways := .Values.demis.gateway.services }}
+{{/* Allows the DEMIS Services to access Keycloak in the IDM Namespace */}}
+{{- range .Values.idm.keycloak.demisNamespaces }}
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: keycloak-allow-access-from-{{ . }}
+  labels:
+    component: idm
+spec:
+  selector:
+    matchLabels:
+      app: keycloak
+  action: ALLOW
+  rules:
+    - from:
+      - source:
+          principals: 
+            - "cluster.local/ns/{{ . }}/sa/report-processing-service*"
+      to:
+      - operation:
+          methods: ["GET", "POST"]
+          paths: [
+            "/realms/HOSPITAL/*"
+          ]
+    - from:
+      - source:
+          principals: 
+            - "cluster.local/ns/{{ . }}/sa/igs-service*"
+      to:
+      - operation:
+          methods: ["GET", "POST"]
+          paths: [
+            "/realms/LAB/*"
+          ]
+{{- end }}
+{{- end }}

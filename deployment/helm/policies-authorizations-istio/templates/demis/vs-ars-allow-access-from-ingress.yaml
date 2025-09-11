@@ -1,0 +1,23 @@
+{{- if and (eq .Values.demis.enabled true) (eq .Values.demis.validation.allowExternalAccess true) }}
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: vs-ars-allow-access-from-ingress
+  labels:
+    component: demis
+spec:
+  selector:
+    matchLabels:
+      app: validation-service-ars
+  action: ALLOW
+  rules:
+    - from:
+        - source:
+            principals: [
+              "cluster.local/ns/istio-system/sa/istio-ingressgateway"
+            ]
+      to:
+        - operation:
+            methods: [ "POST" ]
+            paths: [ "/$validate" ]
+{{ end -}}

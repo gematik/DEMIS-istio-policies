@@ -1,0 +1,6 @@
+requestAuth:
+  # The external URL used for accessing the Keycloak service as an IDP Issuer
+  issuerUrl: https://auth.ingress.local
+  # The internal URL of the Keycloak service
+  # In the new layout, this should be set to "http://keycloak.idm.svc.cluster.local:8080"
+  keycloakUrl: http://keycloak.demis.svc.cluster.local:8080

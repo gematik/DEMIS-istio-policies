@@ -1,0 +1,25 @@
+{{- if eq .Values.ekmTemplate.enabled true }}
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: service-demo-allow-access-from-ingress
+  labels:
+    component: demis
+spec:
+  selector:
+    matchLabels:
+      app: service-demo
+  action: ALLOW
+  rules:
+  - from:
+    - source:
+        principals: [
+          "cluster.local/ns/istio-system/sa/istio-ingressgateway",
+        ]
+    to:
+    - operation:
+        methods: [ "GET" ]
+        paths: [
+          "/api/hello",
+        ]
+{{- end }}

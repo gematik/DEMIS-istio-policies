@@ -1,0 +1,30 @@
+{{- if eq .Values.demis.enabled true }}
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: fss-writer-allow-access-from-internal
+  labels:
+    component: demis
+spec:
+  selector:
+    matchLabels:
+      app: fhir-storage-writer
+  action: ALLOW
+  rules:
+  - from:
+    - source:
+        principals: [
+          "cluster.local/ns/{{ .Release.Namespace }}/sa/igs-service*",
+          "cluster.local/ns/{{ .Release.Namespace }}/sa/report-processing-service*",
+          "cluster.local/ns/{{ .Release.Namespace }}/sa/notification-processing-service*",
+          "cluster.local/ns/{{ .Release.Namespace }}/sa/ars-service*"
+        ]
+    to:
+    - operation:
+        methods: ["POST"]
+        {{- if eq .Values.featureFlags.newApiEndpoints true }}
+        paths: []
+        {{- else }}
+        paths: [ "/notification-clearing-api/fhir/" ]
+        {{- end }}
+{{- end }}

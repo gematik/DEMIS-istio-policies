@@ -1,0 +1,22 @@
+{{- if and (eq .Values.demis.enabled true) (eq .Values.demis.local.minio.enabled true) }}
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: minio-allow-access-from-ingress
+  labels:
+    component: demis
+spec:
+  selector:
+    matchLabels:
+      app: minio
+  action: ALLOW
+  rules:
+  - from:
+    - source:
+        principals: 
+         - cluster.local/ns/{{ .Release.Namespace }}/sa/igs-service*
+         - cluster.local/ns/istio-system/sa/istio-ingressgateway
+    to:
+    - operation:
+        ports: ["8080"]
+{{- end }}

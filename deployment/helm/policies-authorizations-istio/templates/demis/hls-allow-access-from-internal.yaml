@@ -1,0 +1,27 @@
+{{- if eq .Values.demis.enabled true }}
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: hls-allow-from-internal
+  labels:
+    component: demis
+spec:
+  selector:
+    matchLabels:
+      app: hospital-location-service
+  action: ALLOW
+  rules:
+    - from:
+        - source:
+            principals: [
+              "cluster.local/ns/{{ .Release.Namespace }}/sa/report-processing-service*"
+            ]
+      to:
+        - operation:
+            methods: [ "GET" ]
+            {{- if eq .Values.featureFlags.newApiEndpoints true }}
+            paths: [ "/locations" ]
+            {{- else }}
+            paths: [ "/hospital-locations" ]
+            {{- end }}
+{{- end }}

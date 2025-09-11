@@ -1,0 +1,85 @@
+{{- if eq .Values.demis.enabled true }}
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: igs-allow-access-from-ingress
+  labels:
+    component: demis
+spec:
+  selector:
+    matchLabels:
+      app: igs-service
+  action: ALLOW
+  rules:
+  - from:
+    - source:
+        principals: [
+          "cluster.local/ns/istio-system/sa/istio-ingressgateway",
+          "cluster.local/ns/{{ .Release.Namespace }}/sa/gateway-igs*"
+        ]
+    to:
+    - operation:
+        methods: [ "POST" ]
+        {{- if eq .Values.featureFlags.newApiEndpoints true }}
+        paths: [ "/DocumentReference*"  ]
+        {{- else }}
+        paths: [ "/fhir/DocumentReference*" ]
+        {{- end }}
+    when:
+      - key: request.auth.claims[realm_access][roles]
+        values: [ "igs-sequence-data-sender", "igs-sequence-data-sender-fasta-only" ]
+
+  - from:
+      - source:
+          principals: [
+            "cluster.local/ns/istio-system/sa/istio-ingressgateway"
+          ]
+    to:
+      - operation:
+          methods: [ "GET", "POST" ]
+          paths: [ "/S3Controller/upload*" ]
+    when:
+      - key: request.auth.claims[realm_access][roles]
+        values: [ "igs-sequence-data-sender", "igs-sequence-data-sender-fasta-only" ]
+
+  - from:
+    - source:
+        principals: [
+          "cluster.local/ns/istio-system/sa/istio-ingressgateway",
+          "cluster.local/ns/{{ .Release.Namespace }}/sa/gateway-igs*"
+        ]
+    to:
+    - operation:
+        methods: [ "POST" ]
+        {{- if eq .Values.featureFlags.newApiEndpoints true }}
+        paths: [
+          "/$process-notification-sequence",
+          "/%24process-notification-sequence"
+        ]
+        {{- else }}
+        paths: [
+          "/fhir/$process-notification-sequence",
+          "/fhir/%24process-notification-sequence"
+        ]
+        {{- end }}
+    when:
+      - key: request.auth.claims[realm_access][roles]
+        values: [ "igs-notification-data-sender" ]
+
+  - from:
+      - source:
+          principals: [
+            "cluster.local/ns/istio-system/sa/istio-ingressgateway",
+          ]
+    to:
+      - operation:
+          methods: [ "GET" ]
+          {{- if eq .Values.featureFlags.newApiEndpoints true }}
+          paths: [ "/DocumentReference/*" ]
+          {{- else }}
+          paths: [ "/fhir/DocumentReference/*" ]
+          {{- end }}
+    when:
+      - key: request.auth.claims[realm_access][roles]
+        values: [ "igs-sequence-data-fetcher" ]
+{{- end }}

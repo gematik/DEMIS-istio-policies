@@ -1,0 +1,24 @@
+{{- if and (eq .Values.demis.enabled true ) (eq .Values.demis.dls.enabled true)  }}
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: dls-writer-allow-access-from-internal
+  labels:
+    component: demis
+spec:
+  selector:
+    matchLabels:
+      app: destination-lookup-writer
+  action: ALLOW
+  rules:
+  - from:
+    - source:
+        principals: [
+          "cluster.local/ns/{{ .Release.Namespace }}/sa/notification-processing-service*"
+        ]
+    to:
+    - operation:
+        methods: ["POST"]
+        paths:
+          - "/notification*"
+{{- end }}

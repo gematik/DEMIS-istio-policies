@@ -1,0 +1,40 @@
+{{- if eq .Values.idm.enabled true }}
+{{/* Allows the IDM Services to access Keycloak in the IDM Namespace */}}
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: keycloak-allow-access-from-internal
+  labels:
+    component: idm
+spec:
+  selector:
+    matchLabels:
+      app: keycloak
+  action: ALLOW
+  rules:
+  - from:
+    - source:
+        principals: [
+          "cluster.local/ns/{{ .Release.Namespace }}/sa/certificate-update-service*"
+        ]
+    to:
+    - operation:
+        methods: ["GET", "POST"]
+        paths: [
+          "/admin/realms/OEGD/users",
+          "/realms/master/protocol/openid-connect/token",
+          "/realms/OEGD/protocol/openid-connect/token"
+        ]
+  - from:
+      - source:
+          principals: [
+            "cluster.local/ns/{{ .Release.Namespace }}/sa/keycloak-user-purger*"
+          ]
+    to:
+      - operation:
+          methods: ["GET", "POST", "DELETE"]
+          paths: [
+            "/realms/PORTAL/*",
+            "/admin/realms/PORTAL/*"
+          ]
+{{- end }}

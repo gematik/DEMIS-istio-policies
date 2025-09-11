@@ -1,0 +1,22 @@
+{{- if and (eq .Values.postgres.enabled true) (eq .Values.tcp.principals.enabled false)}}
+{{/* Allows the Cluster Services to access PostgreSQL */}}
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: postgres-allow-access-from-internal
+  labels:
+    component: database
+spec:
+  selector:
+    matchLabels:
+      app: postgres
+  action: ALLOW
+  rules:
+  - from:
+    - source:
+        ipBlocks: ["0.0.0.0/0"]
+    to:
+    - operation:
+        # TCP Only
+        ports: ["5432"]
+{{- end }}
