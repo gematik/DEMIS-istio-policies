@@ -1,0 +1,40 @@
+{{- if and (eq .Values.demis.enabled true) (eq .Values.demis.local.prometheusMetrics.enabled true) }}
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: demis-allow-access-from-prometheus
+  labels:
+    component: monitoring
+spec:
+  action: ALLOW
+  rules:
+    - from:
+        - source:
+            principals:
+              - cluster.local/ns/istio-system/sa/prometheus
+      to:
+        - operation:
+            methods:
+              - GET
+            paths:
+              - /actuator/prometheus*
+            host:
+              - "validation-service-core.{{ .Release.Namespace }}.svc.cluster.local"
+              - "validation-service-igs.{{ .Release.Namespace }}.svc.cluster.local"
+              - "futs-core.{{ .Release.Namespace }}.svc.cluster.local"
+              - "futs-igs.{{ .Release.Namespace }}.svc.cluster.local"
+              - "pdfgen-service.{{ .Release.Namespace }}.svc.cluster.local"
+              - "report-processing-service.{{ .Release.Namespace }}.svc.cluster.local"
+              - "hospital-location-service.{{ .Release.Namespace }}.svc.cluster.local"
+              - "pseudonymization-service.{{ .Release.Namespace }}.svc.cluster.local"
+              - "pseudonymization-storage-service.{{ .Release.Namespace }}.svc.cluster.local"
+              - "notification-processing-service.{{ .Release.Namespace }}.svc.cluster.local"
+              - "notification-routing-service.{{ .Release.Namespace }}.svc.cluster.local"
+              - "lifecycle-validation-service.{{ .Release.Namespace }}.svc.cluster.local"
+              - "fhir-storage-reader.{{ .Release.Namespace }}.svc.cluster.local"
+              - "fhir-storage-writer.{{ .Release.Namespace }}.svc.cluster.local"
+              - "context-enrichment-service.{{ .Release.Namespace }}.svc.cluster.local"
+              {{- range .Values.demis.gateway.services }}
+              - "{{ . }}.{{ $.Release.Namespace }}.svc.cluster.local"
+              {{- end }}
+{{- end }}

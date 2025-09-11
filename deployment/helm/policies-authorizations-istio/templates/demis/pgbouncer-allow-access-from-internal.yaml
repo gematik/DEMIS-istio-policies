@@ -1,0 +1,32 @@
+{{- if and (eq .Values.demis.enabled true) (eq .Values.pgbouncer.enabled true) (eq .Values.tcp.principals.enabled true)}}
+{{/* Allows the Cluster Services to access PgBouncer */}}
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: pgbouncer-allow-access-from-internal
+  labels:
+    component: database
+spec:
+  selector:
+    matchLabels:
+      app: pgbouncer
+  action: ALLOW
+  rules:
+  - from:
+    - source:
+        principals:
+          - "cluster.local/ns/{{ .Release.Namespace }}/sa/fhir-storage-reader*"
+          - "cluster.local/ns/{{ .Release.Namespace }}/sa/fhir-storage-writer*"
+          - "cluster.local/ns/{{ .Release.Namespace }}/sa/fhir-storage-purger*"
+          - "cluster.local/ns/{{ .Release.Namespace }}/sa/pseudonymization-service*"
+          - "cluster.local/ns/{{ .Release.Namespace }}/sa/surveillance-pseudonym-service*"
+          {{- if eq .Values.demis.dls.enabled true }}
+          - "cluster.local/ns/{{ .Release.Namespace }}/sa/destination-lookup-writer*"
+          - "cluster.local/ns/{{ .Release.Namespace }}/sa/destination-lookup-reader*"
+          - "cluster.local/ns/{{ .Release.Namespace }}/sa/destination-lookup-purger*"
+          {{- end }}
+    to:
+    - operation:
+        # TCP Only
+        ports: ["5432"]
+{{- end }}

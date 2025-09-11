@@ -1,0 +1,21 @@
+{{- if and (eq .Values.mesh.enabled true) (eq .Values.mesh.allowList.enabled true) }}
+{{/* Allows incoming traffic at Mesh-Level only from specific IPs */}}
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: allowed-external-ips
+  namespace: istio-system
+spec:
+  selector:
+    matchLabels:
+      app: istio-ingressgateway
+  action: ALLOW
+  rules:
+    - when:
+        - key: request.headers[x-real-ip]
+          values:
+            {{- $dynamicIPs := .Values.mesh.allowList.ips }}
+            {{- range .Values.mesh.allowList.ips }}
+            - {{ . | quote }}
+            {{- end }}
+{{- end }}

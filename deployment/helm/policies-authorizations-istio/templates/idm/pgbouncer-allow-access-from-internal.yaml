@@ -1,0 +1,30 @@
+{{- if and (eq .Values.idm.enabled true) (eq .Values.pgbouncer.enabled true) (eq .Values.tcp.principals.enabled true)}}
+{{/* Allows the Cluster Services to access PgBouncer */}}
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: pgbouncer-allow-access-from-internal
+  labels:
+    component: database
+spec:
+  selector:
+    matchLabels:
+      app: pgbouncer
+  action: ALLOW
+  rules:
+  - from:
+    - source:
+        principals: [
+            {{if eq .Values.idm.bundidIdp.enabled true }}
+              "cluster.local/ns/{{ .Release.Namespace }}/sa/bundid-idp*",
+            {{end}}
+            {{if eq .Values.idm.gematikIdp.enabled true }}
+              "cluster.local/ns/{{ .Release.Namespace }}/sa/gematik-idp*",
+            {{end}}
+            "cluster.local/ns/{{ .Release.Namespace }}/sa/keycloak*"
+          ]
+    to:
+    - operation:
+        # TCP Only
+        ports: ["5432"]
+{{- end }}

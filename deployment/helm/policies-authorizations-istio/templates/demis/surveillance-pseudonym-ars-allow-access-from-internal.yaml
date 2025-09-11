@@ -1,0 +1,23 @@
+{{- if and ( eq .Values.demis.enabled true) ( eq .Values.demis.sps.arsEnabled true) }}
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: surveillance-pseudonym-ars-allow-access-from-internal
+  labels:
+    component: demis
+spec:
+  selector:
+    matchLabels:
+      app: surveillance-pseudonym-service-ars
+  action: ALLOW
+  rules:
+  - from:
+    - source:
+        principals: [
+          "cluster.local/ns/{{ .Release.Namespace }}/sa/ars-service*"
+        ]
+    to:
+    - operation:
+        methods: ["POST"] 
+        paths: []
+{{- end }}

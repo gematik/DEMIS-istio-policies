@@ -1,0 +1,36 @@
+{{- if eq .Values.demis.enabled true }}
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: futs-core-allow-access-from-ingress
+  labels:
+    component: demis
+spec:
+  selector:
+    matchLabels:
+      app: futs-core
+  action: ALLOW
+  rules:
+    - from:
+        - source:
+            principals: [
+              "cluster.local/ns/istio-system/sa/istio-ingressgateway"
+            ]
+      to:
+        - operation:
+            methods: [ "GET" ]
+            paths: [ "/CodeSystem", "/ValueSet", "/disease*", "/laboratory/*", "/pathogen/*", "/utils/*" ]
+      {{/* Restrict access only to the given roles */}}
+      when:
+        - key: request.auth.claims[realm_access][roles]
+          values: 
+            - "disease-notification-sender"
+            - "disease-notification-nonnominal-sender"
+            - "disease-notification-anonymous-sender"
+            - "pathogen-notification-sender"
+            - "pathogen-notification-nonnominal-sender"
+            - "pathogen-notification-anonymous-sender"
+            - "pathogen-notification-negative-sender"
+    {{/* Allow all operations for the given IPs */}}
+    {{- (include "policies-authorization-chart.allow_all_operations_for_ips" .) | indent 4 }}
+{{ end -}}

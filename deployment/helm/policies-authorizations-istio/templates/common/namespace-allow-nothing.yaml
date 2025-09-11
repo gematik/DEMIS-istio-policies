@@ -1,0 +1,12 @@
+{{- if .Values.allowNothing }}
+{{/* Blocks all the traffic in the namespace */}}
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  # https://istio.io/latest/docs/concepts/security/#allow-nothing-deny-all-and-allow-all-policy
+  #It is a good security practice to start with the allow-nothing policy and incrementally add more ALLOW policies to open more access to the workload.
+  name: namespace-allow-nothing
+spec:
+  action: ALLOW
+  # the rules field is not specified, and the policy will never match.
+{{- end }}

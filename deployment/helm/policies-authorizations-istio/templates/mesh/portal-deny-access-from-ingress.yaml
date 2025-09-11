@@ -1,0 +1,31 @@
+{{- if (eq .Values.mesh.portal.allowList.enabled true) }}
+
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: portal-deny-access-from-ingress
+  labels:
+    component: mesh
+  namespace: istio-system
+spec:
+  selector:
+    matchLabels:
+      app: istio-ingressgateway
+  action: DENY
+  rules:
+    - to:
+        - operation:
+            {{- if gt (len .Values.mesh.portal.allowList.domains ) 0 }}
+            hosts:
+              {{- range .Values.mesh.portal.allowList.domains }}
+              - {{ . | quote }}
+              {{- end }}
+            {{- end }}
+            methods: [ "POST", "GET" ]
+            paths: [ "/*" ]
+      when:
+        - key: request.headers[x-real-ip]
+          notValues:
+            {{- $dynamicIPs := .Values.mesh.portal.allowList.ips }}
+            [{{- range $index, $ip := $dynamicIPs }}{{- if $index }},{{- end }}"{{ $ip }}"{{- end }}]
+  {{- end }}

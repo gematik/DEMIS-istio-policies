@@ -1,0 +1,30 @@
+{{- if eq .Values.demis.enabled true }}
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: futs-allow-access-from-internal
+  labels:
+    component: demis
+spec:
+  selector:
+    matchLabels:
+      app: futs
+  action: ALLOW
+  rules:
+    - from:
+      - source:
+          principals:
+            - "cluster.local/ns/istio-system/sa/istio-ingressgateway"
+            - "cluster.local/ns/{{ .Release.Namespace }}/sa/pdfgen-service*"
+            - "cluster.local/ns/{{ .Release.Namespace }}/sa/notification-processing-service*"
+            - "cluster.local/ns/{{ .Release.Namespace }}/sa/igs-service*"
+            {{- include "policies-authorization-chart.gateway_service_accounts" (dict "namespace" .Release.Namespace "services" .Values.demis.gateway.services) | indent 12}}
+      to:
+      - operation:
+          methods: ["GET"]
+          {{- if eq .Values.featureFlags.newApiEndpoints true }}
+          paths: []
+          {{- else }}
+          paths: [ "/fhir-ui-data-model-translation/*" ]
+          {{- end }}
+{{- end }}

@@ -1,0 +1,94 @@
+# If active, as default all traffic is denied
+allowNothing: true
+
+# If active, allow the services to access the local Postgres database
+postgres:
+  enabled: true
+
+# If active, allow the services to access PGBouncer
+pgbouncer:
+  enabled: true
+
+# Switches Auth Policies for TCP Services to principals instead of IPs
+tcp:
+  principals:
+    enabled: false
+
+# Identity Managements (IDM) Policies
+idm:
+  enabled: true
+  # Define the namespace where the IDM Policies/Services are deployed
+  namespace: "demis"
+  # Define Keycloak-related configurations
+  keycloak:
+    demisNamespaces: 
+      - demis
+    ekmNamespaces: []
+    # Domains, that allow users to access the applications
+    #appDomains:
+    #  - demis.rki.de
+    appDomains: []
+    # Domains, that allow users to perform the authentication
+    #authDomains:
+    #  - auth.demis.rki.de
+    authDomains: []
+    # List of IPs that are allowed to access the Keycloak Instance
+    allowList:
+      enabled: false
+      ips: []
+  bundidIdp:
+    enabled: false
+  gematikIdp:
+    enabled: false
+
+# DEMIS Services Policies
+demis:
+  enabled: true
+  namespace: "demis"
+  # List of IPs that are allowed to access the services
+  # Uses the same IPs as defined for the the Keycloak allowList
+  allowList:
+    enabled: false
+  # List of DEMIS Gateway Services
+  gateway:
+    services:
+      - notification-gateway
+      - gateway-igs
+  local:
+    # If active, allows the services to access the minio instance  
+    minio:
+      enabled: false
+    # If active, allows Prometheus to access the services metrics
+    prometheusMetrics:
+      enabled: false
+  # if active, allows external access (from ingress) to all validation services
+  validation:
+    allowExternalAccess: false
+  sps:
+    # if active, deploys authorization policy for surveillance-pseudonym-service-ars
+    arsEnabled: false
+  # if active, deploys authorization policy for destination-lookup-service
+  dls:
+    enabled: false
+
+# Mesh Services Policies
+mesh:
+  enabled: true
+  # List of IPs that are allowed to access the services through the Ingress Gateway
+  allowList:
+    enabled: false
+    ips: []
+  # Configuration that allow users to access the portal applications
+  portal:
+    allowList:
+      enabled: false
+      #domains:
+      #  - meldung.demis.rki.de
+      domains: []
+      ips: []
+
+ekmTemplate:
+  enabled: false
+
+featureFlags:
+  newApiEndpoints: false

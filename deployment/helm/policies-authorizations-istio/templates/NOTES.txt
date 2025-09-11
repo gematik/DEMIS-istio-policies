@@ -1,0 +1,40 @@
+This Helm Chart creates different Istio AuthorizationPolicy Objects that define which Service Account can access a particular service.
+
+The Rules are defined in form of "<service|namespace>-allow-access-from-<namespace>", signalizing that a service or a namespace are accessed from different namespaces, such as:
+
+- ingress, the Istio Gateway which allows the incoming traffic from external sources
+- idm, the Namespace that contains all the specific Identity Management Services
+- demis, the Namespace that contains the DEMIS Core Services
+- internal, the same namespace where the service that allows traffic is deployed
+
+### Summary
+
+Restrict All Traffic: {{ .Values.allowNothing }}
+PostgreSQL Policy enabled: {{ .Values.postgres.enabled }}
+PgBouncer Policy enabled: {{ .Values.pgbouncer.enabled }}
+
+{{- if eq .Values.mesh.enabled true }}
+
+### Mesh
+
+Access to Restricted IPs: {{ .Values.mesh.allowList.enabled }}
+{{- end }}
+
+{{- if eq .Values.idm.enabled true }}
+
+### IDM
+
+IDM Policies deployed in Namespace: "{{ .Values.idm.namespace }}"
+Access to Keycloak from Restricted IPs: {{ .Values.idm.keycloak.allowList.enabled }}
+BundID-IDP enabled: {{ .Values.idm.bundidIdp.enabled }}
+gematik-IDP enabled: {{ .Values.idm.gematikIdp.enabled }}
+{{- end }}
+
+{{- if eq .Values.demis.enabled true }}
+
+### DEMIS
+
+DEMIS Policies deployed in Namespace: "{{ .Values.demis.namespace }}"
+DEMIS Local MinIO Policies enabled: "{{ .Values.demis.local.minio.enabled }}"
+DEMIS Local Prometheus Policies enabled: "{{ .Values.demis.local.prometheusMetrics.enabled }}"
+{{- end }}

@@ -1,0 +1,23 @@
+{{- if eq .Values.demis.enabled true }}
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: pseudonymization-allow-access-from-internal
+  labels:
+    component: demis
+spec:
+  selector:
+    matchLabels:
+      app: pseudonymization-service
+  action: ALLOW
+  rules:
+  - from:
+    - source:
+        principals: [
+            "cluster.local/ns/{{ .Release.Namespace }}/sa/notification-processing-service*"
+        ]
+    to:
+    - operation:
+        methods: ["POST"] 
+        paths: ["/pseudonymization"]
+{{- end }}

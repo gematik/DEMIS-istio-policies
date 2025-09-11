@@ -1,0 +1,25 @@
+{{- if eq .Values.demis.enabled true }}
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: futs-core-allow-access-from-internal
+  labels:
+    component: demis
+spec:
+  selector:
+    matchLabels:
+      app: futs-core
+  action: ALLOW
+  rules:
+    - from:
+        - source:
+            principals: [
+              "cluster.local/ns/{{ .Release.Namespace }}/sa/pdfgen-service*",
+              "cluster.local/ns/{{ .Release.Namespace }}/sa/notification-processing-service*",
+              "cluster.local/ns/{{ .Release.Namespace }}/sa/notification-routing-service*"
+            ]
+      to:
+        - operation:
+            methods: [ "GET" ]
+            paths: [ "/CodeSystem", "/ValueSet", "/conceptmap/*", "/disease*", "/laboratory/*", "/pathogen/*", "/utils/*" ]
+{{ end -}}

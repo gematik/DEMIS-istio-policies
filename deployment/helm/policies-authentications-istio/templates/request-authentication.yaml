@@ -1,0 +1,79 @@
+apiVersion: security.istio.io/v1
+kind: RequestAuthentication
+metadata:
+  name: demis-request-authentication
+spec:
+  selector:
+    matchLabels:
+      istio-validate-jwt: 'true'
+  jwtRules:
+    - issuer: {{ .Values.requestAuth.issuerUrl }}/realms/HOSPITAL
+      jwksUri: {{ .Values.requestAuth.keycloakUrl }}/realms/HOSPITAL/protocol/openid-connect/certs
+      forwardOriginalToken: true
+      outputClaimToHeaders:
+        - header: "azp"
+          claim: "azp"
+        - header: "IK-Number"
+          claim: "ik"
+        - header: "x-sender"
+          claim: "preferred_username"
+        - header: "x-testuser"
+          claim: "accountIsTest"
+        - header: "x-testuser-recipient"
+          claim: "testuserRecipient"
+    - issuer: {{ .Values.requestAuth.issuerUrl }}/realms/LAB
+      jwksUri: {{ .Values.requestAuth.keycloakUrl }}/realms/LAB/protocol/openid-connect/certs
+      forwardOriginalToken: true
+      outputClaimToHeaders:
+        - header: "azp"
+          claim: "azp"
+        - header: "IK-Number"
+          claim: "ik"
+        - header: "x-sender"
+          claim: "preferred_username"
+        - header: "x-testuser"
+          claim: "accountIsTest"
+        - header: "x-testuser-recipient"
+          claim: "testuserRecipient"
+    - issuer: {{ .Values.requestAuth.issuerUrl }}/realms/OEGD
+      jwksUri: {{ .Values.requestAuth.keycloakUrl }}/realms/OEGD/protocol/openid-connect/certs
+      forwardOriginalToken: true
+      outputClaimToHeaders:
+        - header: "azp"
+          claim: "azp"
+        - header: "IK-Number"
+          claim: "ik"
+        - header: "x-sender"
+          claim: "preferred_username"
+        - header: "x-testuser"
+          claim: "accountIsTest"
+        - header: "x-testuser-recipient"
+          claim: "testuserRecipient"
+    - issuer: {{ .Values.requestAuth.issuerUrl }}/realms/PORTAL
+      jwksUri: {{ .Values.requestAuth.keycloakUrl }}/realms/PORTAL/protocol/openid-connect/certs
+      forwardOriginalToken: true
+      outputClaimToHeaders:
+        - header: "azp"
+          claim: "azp"
+        - header: "IK-Number"
+          claim: "ik"
+        - header: "x-sender"
+          claim: "preferred_username"
+        - header: "x-testuser"
+          claim: "accountIsTest"
+        - header: "x-testuser-recipient"
+          claim: "testuserRecipient"
+    - issuer: {{ .Values.requestAuth.issuerUrl }}/realms/INSTITUTIONS-TI
+      jwksUri: {{ .Values.requestAuth.keycloakUrl }}/realms/INSTITUTIONS-TI/protocol/openid-connect/certs
+      forwardOriginalToken: true
+      outputClaimToHeaders:
+        - header: "azp"
+          claim: "azp"
+        - header: "IK-Number"
+          claim: "ik"
+        - header: "x-sender"
+          claim: "preferred_username"
+        - header: "x-testuser"
+          claim: "accountIsTest"
+        - header: "x-testuser-recipient"
+          claim: "testuserRecipient"

@@ -1,0 +1,24 @@
+{{- if and (eq .Values.idm.enabled true) (eq .Values.tcp.principals.enabled true) }}
+{{/* Allows the Cluster Services to access Redis in the IDM Namespace */}}
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: redis-cus-allow-access-from-internal
+  labels:
+    component: idm
+spec:
+  selector:
+    matchLabels:
+      app: redis-cus
+  action: ALLOW
+  rules:
+  - from:
+    - source:
+        principals: [
+            "cluster.local/ns/{{ .Release.Namespace }}/sa/certificate-update-service*"
+          ]
+    to:
+    - operation:
+        # TCP Only
+        ports: ["6379"]
+{{- end }}

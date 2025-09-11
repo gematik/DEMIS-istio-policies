@@ -1,0 +1,22 @@
+{{- if and (eq .Values.pgbouncer.enabled true) (eq .Values.tcp.principals.enabled false)}}
+{{/* Allows the Cluster Services to access PgBouncer */}}
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: pgbouncer-allow-access-from-internal
+  labels:
+    component: database
+spec:
+  selector:
+    matchLabels:
+      app: pgbouncer
+  action: ALLOW
+  rules:
+  - from:
+    - source:
+        ipBlocks: ["0.0.0.0/0"]
+    to:
+    - operation:
+        # TCP Only
+        ports: ["5432"]
+{{- end }}
