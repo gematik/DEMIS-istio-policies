@@ -3,6 +3,6 @@ kubeVersion: ">= 1.27.0"
 name: policies-authorizations-istio
 description: DEMIS Istio Authorization-Policies Policies Configuration
 type: application
-version: 2.5.0
-appVersion: "2.5.0"
+version: 2.6.0
+appVersion: "2.6.0"
 icon: https://avatars.githubusercontent.com/u/55493511?s=200&v=4

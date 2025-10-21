@@ -2,11 +2,15 @@
  
 # Release notes Istio-Policies
 
+## 2.6.0
+- add new policies for package-registry
+
 ## 2.5.0
 - add new policies for destination-lookup-service
 - add information to contributing and readme
 - update internal publish pipelines
 - preparations for publishing source code on github
+- allow surveillance-pseudo-purger to pgbouncer
 
 ## 2.4.0
 - allow routing service to call futs

@@ -20,6 +20,7 @@ spec:
           - "cluster.local/ns/{{ .Release.Namespace }}/sa/fhir-storage-purger*"
           - "cluster.local/ns/{{ .Release.Namespace }}/sa/pseudonymization-service*"
           - "cluster.local/ns/{{ .Release.Namespace }}/sa/surveillance-pseudonym-service*"
+          - "cluster.local/ns/{{ .Release.Namespace }}/sa/surveillance-pseudonym-purger*"
           {{- if eq .Values.demis.dls.enabled true }}
           - "cluster.local/ns/{{ .Release.Namespace }}/sa/destination-lookup-writer*"
           - "cluster.local/ns/{{ .Release.Namespace }}/sa/destination-lookup-reader*"
