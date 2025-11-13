@@ -1,6 +1,8 @@
 <img align="right" width="200" height="37" src="media/Gematik_Logo_Flag.png"/> <br/> 
  
 # Release notes Istio-Policies
+## 2.7.0
+- added new policies for new namespace
 
 ## 2.6.0
 - add new policies for package-registry

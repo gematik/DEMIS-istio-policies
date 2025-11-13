@@ -16,7 +16,8 @@ spec:
             principals: [
               "cluster.local/ns/{{ .Release.Namespace }}/sa/pdfgen-service*",
               "cluster.local/ns/{{ .Release.Namespace }}/sa/notification-processing-service*",
-              "cluster.local/ns/{{ .Release.Namespace }}/sa/notification-routing-service*"
+              "cluster.local/ns/{{ .Release.Namespace }}/sa/notification-routing-service*",
+              "cluster.local/ns/{{ .Release.Namespace }}/sa/lifecycle-validation-service*"
             ]
       to:
         - operation:

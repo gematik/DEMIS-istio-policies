@@ -1,0 +1,23 @@
+{{- if (eq .Values.rabbitmq.enabled true) }}
+{{/* Allows the Cluster Services to access RabbitMq */}}
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: rabbit-mq-allow-access-from-bulk-inbound
+  labels:
+    component: rabbitmq
+spec:
+  selector:
+    matchLabels:
+      app: rabbitmq
+  action: ALLOW
+  rules:
+  - from:
+    - source:
+        principals: [
+          "cluster.local/ns/{{ .Release.Namespace }}/sa/bulk-inbound-service*"
+        ]
+    to:
+    - operation:
+        ports: ["5672"]
+{{- end }}

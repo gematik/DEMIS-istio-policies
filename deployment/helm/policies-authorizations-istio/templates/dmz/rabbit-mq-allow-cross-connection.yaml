@@ -1,0 +1,24 @@
+{{- if (eq .Values.rabbitmq.enabled true) }}
+{{/* Allows the Cluster Services to access RabbitMq */}}
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: rabbit-mq-allow-cross-connection
+  labels:
+    component: rabbitmq
+spec:
+  selector:
+    matchLabels:
+      app: rabbitmq
+  action: ALLOW
+  rules:
+  - from:
+    - source:
+        principals: [
+          "cluster.local/ns/{{ .Release.Namespace }}/sa/rabbitmq*"
+        ]
+    to:
+    - operation:
+        # RabbitMQ clustering ports
+        ports: ["4369", "25672"]
+{{- end }}

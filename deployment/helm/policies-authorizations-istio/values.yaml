@@ -5,6 +5,10 @@ allowNothing: true
 postgres:
   enabled: true
 
+# If active, allow the services to access RabbitMQ and allows clustering
+rabbitmq:
+  enabled: false
+
 # If active, allow the services to access PGBouncer
 pgbouncer:
   enabled: true
