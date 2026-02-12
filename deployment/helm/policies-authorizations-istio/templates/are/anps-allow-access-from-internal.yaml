@@ -1,0 +1,22 @@
+{{- if eq .Values.are.enabled true }}
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: anps-allow-from-internal
+spec:
+  selector:
+    matchLabels:
+      app: are-notification-processing-service
+  action: ALLOW
+  rules:
+    - from:
+        - source:
+            principals:
+              - "cluster.local/ns/{{ .Release.Namespace }}/sa/are-gateway*"
+      to:
+        - operation:
+            methods: ["POST"]
+            paths:
+              - "/$process-are-notification"
+              - "/%24process-are-notification"
+{{- end }}

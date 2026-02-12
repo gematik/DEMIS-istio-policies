@@ -1,0 +1,21 @@
+{{- if eq .Values.are.enabled true }}
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: portal-are-allow-access-from-ingress
+  labels:
+    component: are
+spec:
+  selector:
+    matchLabels:
+      app: portal-are
+  action: ALLOW
+  rules:
+    - from:
+      - source:
+          principals: ["cluster.local/ns/istio-system/sa/istio-ingressgateway"] 
+      to:
+      - operation:
+          methods: ["GET", "POST"] 
+          paths: [] 
+{{- end }}

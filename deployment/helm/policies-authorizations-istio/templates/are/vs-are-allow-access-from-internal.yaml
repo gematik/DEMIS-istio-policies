@@ -1,0 +1,22 @@
+{{- if eq .Values.are.enabled true }}
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: vs-are-allow-access-from-internal
+  labels:
+    component: are
+spec:
+  selector:
+    matchLabels:
+      app: validation-service-are
+  action: ALLOW
+  rules:
+  - from:
+    - source:
+        principals:
+          - "cluster.local/ns/{{ .Release.Namespace }}/sa/are-notification-processing-service*"
+    to:
+    - operation:
+        methods: ["POST"] 
+        paths: []
+{{- end }}

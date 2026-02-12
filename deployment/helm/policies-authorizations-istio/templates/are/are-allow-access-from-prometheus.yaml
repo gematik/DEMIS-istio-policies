@@ -1,0 +1,24 @@
+{{- if and (eq .Values.are.enabled true) (eq .Values.are.local.prometheusMetrics.enabled true) }}
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: are-allow-access-from-prometheus
+  labels:
+    component: monitoring
+spec:
+  action: ALLOW
+  rules:
+    - from:
+        - source:
+            principals:
+              - cluster.local/ns/istio-system/sa/prometheus
+      to:
+        - operation:
+            methods:
+              - GET
+            paths:
+              - /actuator/prometheus*
+            host:
+              - "are-notification-processing-service.{{ .Release.Namespace }}.svc.cluster.local"
+              - "are-gateway.{{ .Release.Namespace }}.svc.cluster.local"
+{{- end }}

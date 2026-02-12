@@ -1,0 +1,27 @@
+{{- if eq .Values.demis.enabled true }}
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: fss-writer-allow-access-from-are
+  labels:
+    component: demis
+spec:
+  selector:
+    matchLabels:
+      app: fhir-storage-writer
+  action: ALLOW
+  rules:
+  - from:
+    - source:
+        principals: [
+          "cluster.local/ns/are/sa/are-notification-processing-service*",
+        ]
+    to:
+    - operation:
+        methods: ["POST"]
+        {{- if eq .Values.featureFlags.newApiEndpoints true }}
+        paths: []
+        {{- else }}
+        paths: [ "/notification-clearing-api/fhir/" ]
+        {{- end }}
+{{- end }}
