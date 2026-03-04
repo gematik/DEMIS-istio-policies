@@ -19,11 +19,7 @@ spec:
       to:
         - operation:
             methods: [ "GET" ]
-            {{- if eq .Values.featureFlags.newApiEndpoints true }}
             paths: [ "/locations" ]
-            {{- else }}
-            paths: [ "/hospital-locations" ]
-            {{- end }}
       when:
         - key: request.auth.claims[realm_access][roles]
           values: [ "bed-occupancy-sender" ]

@@ -22,9 +22,5 @@ spec:
       to:
       - operation:
           methods: ["GET"]
-          {{- if eq .Values.featureFlags.newApiEndpoints true }}
           paths: []
-          {{- else }}
-          paths: [ "/fhir-ui-data-model-translation/*" ]
-          {{- end }}
 {{- end }}

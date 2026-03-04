@@ -18,9 +18,7 @@ spec:
         - operation:
             methods: [ "POST" ]
             paths:
-            {{- if eq .Values.featureFlags.newApiEndpoints true }}
               - "/reports/bedOccupancy"
-            {{- end }}
               - "/api/ng/reports/bedOccupancy"
       when:
         - key: request.auth.claims[realm_access][roles]
@@ -32,9 +30,7 @@ spec:
         - operation:
             methods: [ "POST" ]
             paths:
-            {{- if eq .Values.featureFlags.newApiEndpoints true }}
               - "/notification/disease"
-            {{- end }}
               - "/api/ng/notification/disease"
       when:
         - key: request.auth.claims[realm_access][roles]
@@ -48,9 +44,7 @@ spec:
         - operation:
             methods: [ "POST" ]
             paths:
-            {{- if eq .Values.featureFlags.newApiEndpoints true }}
               - "/notification/disease/7.3/anonymous"
-            {{- end }}
               - "/api/ng/notification/disease/7.3/anonymous"
       when:
         - key: request.auth.claims[realm_access][roles]
@@ -64,9 +58,7 @@ spec:
         - operation:
             methods: [ "POST" ]
             paths:
-            {{- if eq .Values.featureFlags.newApiEndpoints true }}
               - "/notification/disease/7.3/non_nominal"
-            {{- end }}
               - "/api/ng/notification/disease/7.3/non_nominal"
       when:
         - key: request.auth.claims[realm_access][roles]
@@ -80,10 +72,8 @@ spec:
         - operation:
             methods: [ "POST" ]
             paths:
-            {{- if eq .Values.featureFlags.newApiEndpoints true }}
               - "/notification/pathogen"
               - "/notification/pathogen/7.1"
-            {{- end }}
               - "/api/ng/notification/pathogen"
               - "/api/ng/notification/pathogen/7.1"
       when:
@@ -96,9 +86,7 @@ spec:
         - operation:
             methods: [ "POST" ]
             paths:
-            {{- if eq .Values.featureFlags.newApiEndpoints true }}
               - "/notification/pathogen/7.3/non_nominal"
-            {{- end }}
               - "/api/ng/notification/pathogen/7.3/non_nominal"
       when:
         - key: request.auth.claims[realm_access][roles]
@@ -110,9 +98,7 @@ spec:
         - operation:
             methods: [ "POST" ]
             paths:
-            {{- if eq .Values.featureFlags.newApiEndpoints true }}
               - "/notification/pathogen/7.3/anonymous"
-            {{- end }}
               - "/api/ng/notification/pathogen/7.3/anonymous"
       when:
         - key: request.auth.claims[realm_access][roles]

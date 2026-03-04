@@ -1,14 +1,18 @@
 <img align="right" width="200" height="37" src="media/Gematik_Logo_Flag.png"/> <br/> 
  
 # Release notes Istio-Policies
+## 2.8.1
+- added new authorization policy for bulk inbound service in dmz namespace
+- allow access to pgbouncer for ars-service
 
 ## 2.8.0
-- fix release Pipeline 
+- fixed release Pipeline 
 - added new policies for prometheus in dmz namespace 
 - added roles for rki to get encrypted excerpts
 - split flag for internal and external access on dls
 - added policies for bulk inbound service (bulk management and upload)
 - added policies for waf and secure-message-gateway
+- removed feature flag 'newApiEndpoints'
 
 ## 2.7.0
 - added new policies for new namespace

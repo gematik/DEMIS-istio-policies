@@ -19,17 +19,10 @@ spec:
       to:
       - operation:
           methods: ["POST"]
-          {{- if eq .Values.featureFlags.newApiEndpoints true }}
           paths: [
             "/$process-notification",
             "/%24process-notification"
           ]
-          {{- else }}
-          paths: [
-            "/fhir/$process-notification",
-            "/fhir/%24process-notification"
-          ]
-          {{- end }}
       when:
         - key: request.auth.claims[realm_access][roles]
           values: [ 

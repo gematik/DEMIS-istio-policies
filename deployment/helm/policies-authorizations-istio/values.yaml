@@ -111,5 +111,4 @@ mesh:
 ekmTemplate:
   enabled: false
 
-featureFlags:
-  newApiEndpoints: false
+featureFlags: {}

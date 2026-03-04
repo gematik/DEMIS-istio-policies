@@ -21,9 +21,8 @@ spec:
         methods: [ "POST" ]
 
         paths: [
-          "/batch/fhir/bundle",
-          "/batch/upload",
-          "/batch/upload*"
+          "/batch/fhir/bundle*",
+          "/batch/upload/*"
         ]
     when:
       - key: request.auth.claims[realm_access][roles]

@@ -19,9 +19,5 @@ spec:
       to:
         - operation:
             methods: [ "GET" ]
-            {{- if eq .Values.featureFlags.newApiEndpoints true }}
             paths: [ "/locations" ]
-            {{- else }}
-            paths: [ "/hospital-locations" ]
-            {{- end }}
 {{- end }}
