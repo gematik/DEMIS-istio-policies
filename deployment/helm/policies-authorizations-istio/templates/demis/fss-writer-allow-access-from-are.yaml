@@ -19,9 +19,5 @@ spec:
     to:
     - operation:
         methods: ["POST"]
-        {{- if eq .Values.featureFlags.newApiEndpoints true }}
-        paths: []
-        {{- else }}
         paths: [ "/notification-clearing-api/fhir/" ]
-        {{- end }}
 {{- end }}
