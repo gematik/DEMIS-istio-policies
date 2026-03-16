@@ -19,5 +19,4 @@ spec:
     to:
     - operation:
         methods: ["POST"]
-        paths: [ "/notification-clearing-api/fhir/" ]
 {{- end }}
