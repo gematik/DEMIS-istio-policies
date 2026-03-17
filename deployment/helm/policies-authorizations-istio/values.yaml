@@ -96,6 +96,10 @@ dmz:
 are:
   enabled: true
   namespace: "are"
+  # List of IPs that are allowed to access the services
+  # Uses the same IPs as defined for the the Keycloak allowList
+  allowList:
+    enabled: false
   # List of Gateway Services
   gateway:
     services:

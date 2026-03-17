@@ -16,7 +16,7 @@ spec:
       to:
         - operation:
             methods: ["POST"]
-            paths: ["/gateway/are"]
+            paths: ["/"]
 
         # TODO: Enable and adapt when auth requirements are final
         # when:
