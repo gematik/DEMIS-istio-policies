@@ -7,6 +7,11 @@ spec:
     matchLabels:
       istio-validate-jwt: 'true'
   jwtRules:
+{{- if eq .Release.Namespace "idm" }}
+    - forwardOriginalToken: true
+      issuer: {{ .Values.requestAuth.issuerUrl }}/realms/master
+      jwksUri: {{ .Values.requestAuth.keycloakUrl }}/realms/master/protocol/openid-connect/certs
+{{- end }}
     - issuer: {{ .Values.requestAuth.issuerUrl }}/realms/HOSPITAL
       jwksUri: {{ .Values.requestAuth.keycloakUrl }}/realms/HOSPITAL/protocol/openid-connect/certs
       forwardOriginalToken: true

@@ -18,7 +18,9 @@ spec:
               - GET
             paths:
               - /actuator/prometheus*
-            host:
+            hosts:
               - "are-notification-processing-service.{{ .Release.Namespace }}.svc.cluster.local"
               - "are-gateway.{{ .Release.Namespace }}.svc.cluster.local"
+              - "validation-service-are.{{ .Release.Namespace }}.svc.cluster.local"
+              - "portal-are.{{ .Release.Namespace }}.svc.cluster.local"
 {{- end }}

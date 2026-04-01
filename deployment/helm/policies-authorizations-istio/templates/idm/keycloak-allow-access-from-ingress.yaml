@@ -17,6 +17,7 @@ spec:
       - operation:
           methods: ["GET"]
           paths: [
+            "/realms/master/protocol/openid-connect/certs",
             "/realms/LAB/protocol/openid-connect/certs",
             "/realms/HOSPITAL/protocol/openid-connect/certs",
             "/realms/OEGD/protocol/openid-connect/certs",
@@ -65,6 +66,12 @@ spec:
             {{- end }} 
             methods: ["POST", "GET"]
             paths: ["/*"]
+            notPaths: ["/realms/PORTAL/surveillance-program-access/*"]
+        - operation:
+            methods: ["OPTIONS"]
+            paths: [
+              "/realms/PORTAL/surveillance-program-access/request-access",
+            ]
       {{- if and (eq .Values.idm.keycloak.allowList.enabled true ) (gt (len .Values.idm.keycloak.allowList.ips) 0) }}
       {{/* Allow only defined IP Addresses */}}
       when:
@@ -89,6 +96,7 @@ spec:
               "/favicon.ico",
               "/resources/*"
             ]
+            notPaths: ["/realms/PORTAL/surveillance-program-access/*"]
         {{- if gt (len .Values.idm.keycloak.appDomains) 0 }}
         - operation:
           # Required to fetch a token and open login screen in portal         
@@ -98,6 +106,7 @@ spec:
               {{- end }}          
             methods: ["GET", "POST"]
             paths: ["/*"]
+            notPaths: ["/realms/PORTAL/surveillance-program-access/*"]
         {{- end }}  
     {{- if (eq .Values.idm.keycloak.allowList.enabled true)}}
     {{/* Allow only defined IP Addresses */}}
@@ -115,4 +124,20 @@ spec:
     {{/* Allow all operations for the given IPs */}}
     {{- (include "policies-authorization-chart.allow_all_operations_for_ips" .) | indent 4 }}
   {{- end }}
+  # Allow the surveillance program access request endpoint to be accessed only with valid token
+    - from:
+        - source:
+            principals: [
+              "cluster.local/ns/istio-system/sa/istio-ingressgateway"
+            ]
+      to:
+        - operation:
+            methods: ["POST"]
+            paths: [
+              "/realms/PORTAL/surveillance-program-access/request-access",
+            ]
+      when: 
+        - key: request.auth.claims[iss]
+          values:  
+            - {{ printf "https://%s/realms/PORTAL" .Values.idm.keycloak.issuerUrl | quote }}
 {{- end }}
