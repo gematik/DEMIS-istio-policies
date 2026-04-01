@@ -23,6 +23,11 @@ spec:
           "/$process-notification",
           "/%24process-notification"
         ]
+    - operation:
+        methods: [ "GET" ]
+        paths: [
+          "/batch/fhir/bundle/*",
+        ]
     when:
       - key: request.auth.claims[realm_access][roles]
         values: [ "ars-data-sender" ]
