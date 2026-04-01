@@ -1,7 +1,10 @@
 <img align="right" width="200" height="37" src="media/Gematik_Logo_Flag.png"/> <br/> 
  
 # Release notes Istio-Policies
-## 2.8.2
+## 2.9.1
+- fix release pipeline 
+
+## 2.9.0
 - added policy for new keycloak "request access" endpoint 
 - added are authorization policies
 
