@@ -25,6 +25,8 @@ idm:
   namespace: "demis"
   # Define Keycloak-related configurations
   keycloak:
+    # The external URL used for accessing Keycloak as an IDP Issuer (must match the 'iss' claim in JWTs)
+    issuerUrl: auth.ingress.local
     demisNamespaces: 
       - demis
     ekmNamespaces: []
@@ -96,18 +98,7 @@ dmz:
 are:
   enabled: true
   namespace: "are"
-  # List of IPs that are allowed to access the services
-  # Uses the same IPs as defined for the the Keycloak allowList
-  allowList:
-    enabled: false
-  # List of Gateway Services
-  gateway:
-    services:
-      - are-gateway
   local:
-    # If active, allows the services to access the minio instance
-    minio:
-      enabled: false
     # If active, allows Prometheus to access the services metrics
     prometheusMetrics:
       enabled: false

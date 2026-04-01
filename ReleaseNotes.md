@@ -1,9 +1,14 @@
 <img align="right" width="200" height="37" src="media/Gematik_Logo_Flag.png"/> <br/> 
  
 # Release notes Istio-Policies
+## 2.8.2
+- added policy for new keycloak "request access" endpoint 
+- added are authorization policies
+
 ## 2.8.1
 - added new authorization policy for bulk inbound service in dmz namespace
 - allow access to pgbouncer for ars-service
+- allow new batch endpoints in ars-service from external
 
 ## 2.8.0
 - fixed release Pipeline 
