@@ -43,7 +43,7 @@ spec:
     to:
       - operation:
           methods: ["GET"]
-          paths: [ "/Binary" ]
+          paths: [ "/Binary*" ]
     when:
       - key: request.auth.claims[realm_access][roles]
         values: [
@@ -53,6 +53,7 @@ spec:
           "disease-notification-nonnominal-fetcher",
           "pathogen-notification-fetcher",
           "pathogen-notification-nonnominal-fetcher",
-          "pathogen-notification-negative-fetcher"
+          "pathogen-notification-negative-fetcher",
+          "are-notification-fetcher"
         ]
 {{- end }}

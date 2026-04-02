@@ -27,7 +27,7 @@ idm:
   keycloak:
     # The external URL used for accessing Keycloak as an IDP Issuer (must match the 'iss' claim in JWTs)
     issuerUrl: auth.ingress.local
-    demisNamespaces: 
+    demisNamespaces:
       - demis
     ekmNamespaces: []
     # Domains, that allow users to access the applications
