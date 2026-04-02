@@ -1,0 +1,25 @@
+{{- if eq .Values.demis.enabled true }}
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: ces-allow-access-from-are
+  labels:
+    component: demis
+spec:
+  selector:
+    matchLabels:
+      app: context-enrichment-service
+  action: ALLOW
+  rules:
+  - from:
+    - source:
+        principals: [
+          "cluster.local/ns/are/sa/are-notification-processing-service*",
+        ]
+    to:
+      - operation:
+          methods: [ "POST" ]
+          paths: [
+            "/enrichment"
+          ]
+{{- end }}
