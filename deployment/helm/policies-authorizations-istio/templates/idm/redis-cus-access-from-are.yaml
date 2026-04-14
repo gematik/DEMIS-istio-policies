@@ -15,7 +15,9 @@ spec:
   - from:
     - source:
         principals:
-          - "cluster.local/ns/are/sa/are-notification-processing-service*"
+          {{- range .Values.idm.areNamespaces }}
+            - "cluster.local/ns/{{ . }}/sa/are-notification-processing-service*"
+          {{- end }}
     to:
     - operation:
         # TCP Only

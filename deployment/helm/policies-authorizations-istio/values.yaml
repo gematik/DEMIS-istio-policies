@@ -42,6 +42,8 @@ idm:
     allowList:
       enabled: false
       ips: []
+  areNamespaces:
+    - are
   bundidIdp:
     enabled: false
   gematikIdp:
@@ -73,12 +75,8 @@ demis:
   sps:
     # if active, deploys authorization policy for surveillance-pseudonym-service-ars
     arsEnabled: false
-  # if active, deploys authorization policy for destination-lookup-service
-  dls:
-    internal:
-      enabled: false
-    external:
-      enabled: false
+  futs:
+    split: false
 
 dmz:
   enabled: false
@@ -96,7 +94,7 @@ dmz:
 
 # ARE Services Policies
 are:
-  enabled: true
+  enabled: false
   namespace: "are"
   local:
     # If active, allows Prometheus to access the services metrics

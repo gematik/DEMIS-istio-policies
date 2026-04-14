@@ -1,14 +1,14 @@
-{{- if and (eq .Values.demis.enabled true) (eq .Values.demis.futs.split false) }}
+{{- if and (eq .Values.demis.enabled true) (eq .Values.demis.futs.split true) }}
 apiVersion: security.istio.io/v1
 kind: AuthorizationPolicy
 metadata:
-  name: futs-core-allow-access-from-ingress
+  name: futs-disease-allow-access-from-ingress
   labels:
     component: demis
 spec:
   selector:
     matchLabels:
-      app: futs-core
+      app: futs-disease
   action: ALLOW
   rules:
     - from:
@@ -19,7 +19,7 @@ spec:
       to:
         - operation:
             methods: [ "GET" ]
-            paths: [ "/CodeSystem", "/ValueSet", "/disease*", "/laboratory/*", "/pathogen/*", "/utils/*" ]
+            paths: [ "/CodeSystem", "/ValueSet", "/disease*", "/utils/*" ]
       {{/* Restrict access only to the given roles */}}
       when:
         - key: request.auth.claims[realm_access][roles]
@@ -27,10 +27,6 @@ spec:
             - "disease-notification-sender"
             - "disease-notification-nonnominal-sender"
             - "disease-notification-anonymous-sender"
-            - "pathogen-notification-sender"
-            - "pathogen-notification-nonnominal-sender"
-            - "pathogen-notification-anonymous-sender"
-            - "pathogen-notification-negative-sender"
     {{/* Allow all operations for the given IPs */}}
     {{- (include "policies-authorization-chart.allow_all_operations_for_ips" .) | indent 4 }}
 {{ end -}}
