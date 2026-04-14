@@ -1,14 +1,14 @@
-{{- if and (eq .Values.demis.enabled true) (eq .Values.demis.futs.split false) }}
+{{- if and (eq .Values.demis.enabled true) (eq .Values.demis.futs.split true) }}
 apiVersion: security.istio.io/v1
 kind: AuthorizationPolicy
 metadata:
-  name: futs-core-allow-access-from-internal
+  name: futs-pathogen-allow-access-from-internal
   labels:
     component: demis
 spec:
   selector:
     matchLabels:
-      app: futs-core
+      app: futs-pathogen
   action: ALLOW
   rules:
     - from:
@@ -22,5 +22,5 @@ spec:
       to:
         - operation:
             methods: [ "GET" ]
-            paths: [ "/CodeSystem", "/ValueSet", "/conceptmap/*", "/disease*", "/laboratory/*", "/pathogen/*", "/utils/*" ]
+            paths: [ "/CodeSystem", "/ValueSet", "/conceptmap/*", "/laboratory/*", "/pathogen/*", "/utils/*" ]
 {{ end -}}
