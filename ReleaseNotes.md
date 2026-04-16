@@ -1,8 +1,13 @@
 <img align="right" width="250" height="47" src="https://raw.githubusercontent.com/gematik/gematik.github.io/master/Gematik_Logo_Flag_With_Background.png" /> <br />   
  
 # Release notes Istio-Policies
+## Release 2.10.1
+- making are Namespace in demis configurable
+- fixed namespace settings for are policies in idm
+- fixed demis namespaces Parameter from .Values.idm.keycloak.demisNamespaces to .Values.idm.demisNamespaces
+
 ## Release 2.10.0
-- fix release Notes generation
+- fixed release Notes generation
 - added policies for futs split
 - Add policies for ARE-services to access redis and ces and cleanup
 - removed flags for enable or disable dls service access
@@ -11,7 +16,7 @@
 - simplify Release Pipeline and cleanup project
 
 ## Release 2.9.1
-- fix release pipeline 
+- fixed release pipeline 
 
 ## Release 2.9.0
 - added policy for new keycloak "request access" endpoint 

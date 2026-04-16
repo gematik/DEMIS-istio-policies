@@ -22,14 +22,17 @@ tcp:
 idm:
   enabled: true
   # Define the namespace where the IDM Policies/Services are deployed
-  namespace: "demis"
+  namespace: "idm"
   # Define Keycloak-related configurations
+  demisNamespaces:
+    - demis
+  # all are namespaces which want to access the redis, especially important in TEST
+  areNamespaces:
+    - are
   keycloak:
     # The external URL used for accessing Keycloak as an IDP Issuer (must match the 'iss' claim in JWTs)
     issuerUrl: auth.ingress.local
-    demisNamespaces:
-      - demis
-    ekmNamespaces: []
+
     # Domains, that allow users to access the applications
     #appDomains:
     #  - demis.rki.de
@@ -42,8 +45,6 @@ idm:
     allowList:
       enabled: false
       ips: []
-  areNamespaces:
-    - are
   bundidIdp:
     enabled: false
   gematikIdp:

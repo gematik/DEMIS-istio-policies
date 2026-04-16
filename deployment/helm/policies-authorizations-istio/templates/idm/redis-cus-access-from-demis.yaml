@@ -15,7 +15,7 @@ spec:
   - from:
     - source:
         principals:
-          {{- range .Values.idm.keycloak.demisNamespaces }}
+          {{- range .Values.idm.demisNamespaces }}
             - "cluster.local/ns/{{ . }}/sa/notification-processing-service*"
           {{- end }}
     to:
