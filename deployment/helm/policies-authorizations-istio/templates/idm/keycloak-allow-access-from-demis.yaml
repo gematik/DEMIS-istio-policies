@@ -1,7 +1,7 @@
 {{- if eq .Values.idm.enabled true }}
 {{ $gateways := .Values.demis.gateway.services }}
 {{/* Allows the DEMIS Services to access Keycloak in the IDM Namespace */}}
-{{- range .Values.idm.keycloak.demisNamespaces }}
+{{- range .Values.idm.demisNamespaces }}
 apiVersion: security.istio.io/v1
 kind: AuthorizationPolicy
 metadata:

@@ -14,7 +14,7 @@ spec:
   - from:
     - source:
         principals: [
-          "cluster.local/ns/are/sa/are-notification-processing-service*",
+          "cluster.local/ns/{{ .Values.are.namespace }}/sa/are-notification-processing-service*"
         ]
     to:
       - operation:
