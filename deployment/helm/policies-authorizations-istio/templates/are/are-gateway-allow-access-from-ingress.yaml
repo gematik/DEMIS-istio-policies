@@ -18,8 +18,7 @@ spec:
             methods: ["POST"]
             paths: ["/"]
 
-        # TODO: Enable and adapt when auth requirements are final
-        # when:
-        #   - key: request.auth.claims[realm_access][roles]
-        #     values: ["disease-notification-sender"]
+      when:
+        - key: request.auth.claims[realm_access][roles]
+          values: ["are-notification-sender"]
 {{- end }}
