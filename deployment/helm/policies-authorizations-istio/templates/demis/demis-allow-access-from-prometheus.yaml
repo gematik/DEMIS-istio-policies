@@ -20,11 +20,12 @@ spec:
               - /actuator/prometheus*
             host:
               - "validation-service-bedoccupancy.{{ .Release.Namespace }}.svc.cluster.local"
-              - "validation-service-core.{{ .Release.Namespace }}.svc.cluster.local"
               - "validation-service-disease.{{ .Release.Namespace }}.svc.cluster.local"
               - "validation-service-pathogen.{{ .Release.Namespace }}.svc.cluster.local"
               - "validation-service-igs.{{ .Release.Namespace }}.svc.cluster.local"
-              - "futs-core.{{ .Release.Namespace }}.svc.cluster.local"
+              - "futs-bedoccupancy.{{ .Release.Namespace }}.svc.cluster.local"
+              - "futs-disease.{{ .Release.Namespace }}.svc.cluster.local"
+              - "futs-pathogen.{{ .Release.Namespace }}.svc.cluster.local"
               - "futs-igs.{{ .Release.Namespace }}.svc.cluster.local"
               - "pdfgen-service.{{ .Release.Namespace }}.svc.cluster.local"
               - "report-processing-service.{{ .Release.Namespace }}.svc.cluster.local"

@@ -26,6 +26,12 @@ spec:
             "/realms/INSTITUTIONS-TI/protocol/openid-connect/certs",
             "/realms/INSTITUTIONS-TI/.well-known/openid-configuration"
           ]
+    # Allow the surveillance program access request options endpoint to be accessed without any restrictions, as it is required for CORS preflight requests
+      - operation:
+          methods: ["OPTIONS"]
+          paths: [
+            "/realms/PORTAL/surveillance-program-access/request-access",
+          ]
     - from:
       - source:
           principals: [
@@ -67,11 +73,6 @@ spec:
             methods: ["POST", "GET"]
             paths: ["/*"]
             notPaths: ["/realms/PORTAL/surveillance-program-access/*"]
-        - operation:
-            methods: ["OPTIONS"]
-            paths: [
-              "/realms/PORTAL/surveillance-program-access/request-access",
-            ]
       {{- if and (eq .Values.idm.keycloak.allowList.enabled true ) (gt (len .Values.idm.keycloak.allowList.ips) 0) }}
       {{/* Allow only defined IP Addresses */}}
       when:
