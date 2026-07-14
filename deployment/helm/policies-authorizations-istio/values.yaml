@@ -64,12 +64,9 @@ demis:
   # if active, allows external access (from ingress) to all validation services
   validation:
     allowExternalAccess: false
-    split: false
   sps:
     # if active, deploys authorization policy for surveillance-pseudonym-service-ars
     arsEnabled: false
-  futs:
-    split: false
 
 dmz:
   enabled: false

@@ -1,6 +1,11 @@
 <img align="right" width="250" height="47" src="https://raw.githubusercontent.com/gematik/gematik.github.io/master/Gematik_Logo_Flag_With_Background.png" /> <br />   
  
 # Release notes Istio-Policies
+## Release 2.12.1
+- removed wrong are policy
+- removed flags for VS and FUTS split
+- request-access available from internet
+
 ## Release 2.12.0
 - removed policies for delegation services because they don't do anything
 - removed feature flag tcp_principals and removed the corresponding policies for pgbouncer, postgres and redis
