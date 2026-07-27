@@ -34,6 +34,6 @@ gematik-IDP enabled: {{ .Values.idm.gematikIdp.enabled }}
 ### DEMIS
 
 DEMIS Policies deployed in Namespace: "{{ .Values.demis.namespace }}"
-DEMIS Local MinIO Policies enabled: "{{ .Values.demis.local.minio.enabled }}"
+DEMIS Local object-storage-service Policies enabled: "{{ .Values.demis.local.oss.enabled }}"
 DEMIS Local Prometheus Policies enabled: "{{ .Values.demis.local.prometheusMetrics.enabled }}"
 {{- end }}
