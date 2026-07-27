@@ -55,8 +55,8 @@ demis:
       - notification-gateway
       - gateway-igs
   local:
-    # If active, allows the services to access the minio instance  
-    minio:
+    # If active, allows the services to access the object-storage-service instance (S3)
+    oss:
       enabled: false
     # If active, allows Prometheus to access the services metrics
     prometheusMetrics:
