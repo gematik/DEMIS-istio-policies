@@ -27,6 +27,7 @@ spec:
               - "futs-disease.{{ .Release.Namespace }}.svc.cluster.local"
               - "futs-pathogen.{{ .Release.Namespace }}.svc.cluster.local"
               - "futs-igs.{{ .Release.Namespace }}.svc.cluster.local"
+              - "futs-ars.{{ .Release.Namespace }}.svc.cluster.local"
               - "pdfgen-service.{{ .Release.Namespace }}.svc.cluster.local"
               - "report-processing-service.{{ .Release.Namespace }}.svc.cluster.local"
               - "hospital-location-service.{{ .Release.Namespace }}.svc.cluster.local"

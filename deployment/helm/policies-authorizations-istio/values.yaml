@@ -68,6 +68,11 @@ demis:
     # if active, deploys authorization policy for surveillance-pseudonym-service-ars
     arsEnabled: false
 
+  # if active, deploys authorization policies for audit log services (fss-writer or fss-reader)
+  auditLogs:
+    fssrEnabled: false
+    fsswEnabled: false
+
 dmz:
   enabled: false
   namespace: "dmz"
@@ -105,6 +110,10 @@ mesh:
       #  - meldung.demis.rki.de
       domains: []
       ips: []
+  otlpGateway:
+    enabled: false
+    hosts:
+      - otlp.ingress.local
 
 ekmTemplate:
   enabled: false

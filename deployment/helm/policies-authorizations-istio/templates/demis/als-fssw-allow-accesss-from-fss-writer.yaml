@@ -1,0 +1,22 @@
+{{- if and (eq .Values.demis.enabled true) (eq .Values.demis.auditLogs.fsswEnabled true) }}
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: als-fssw-allow-access-from-fss-writer
+  labels:
+    component: audit-log
+spec:
+  selector:
+    matchLabels:
+      app: audit-log-service-fssw
+  action: ALLOW
+  rules:
+  - from:
+    - source:
+        principals:
+        - "cluster.local/ns/{{ $.Release.Namespace }}/sa/fhir-storage-writer-*"
+    to:
+    - operation:
+        ports: ["50051"]
+{{- end }}
+
