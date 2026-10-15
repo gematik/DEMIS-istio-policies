@@ -1,6 +1,12 @@
 <img align="right" width="250" height="47" src="https://raw.githubusercontent.com/gematik/gematik.github.io/master/Gematik_Logo_Flag_With_Background.png" /> <br />   
  
 # Release notes Istio-Policies
+## Release 2.13.0
+- added authorization policies for audit log services of fhir storage services writer and reader
+- removed chart version constraints
+- allowed otlp gateway access without x-real-ip header to mesh rules if ip filter is enabled
+- added authorization policy for ars-service to access futs-ars
+
 ## Release 2.12.2
 - added policy for object-storage-service (new S3)
 

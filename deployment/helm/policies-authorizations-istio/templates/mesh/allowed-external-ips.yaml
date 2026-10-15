@@ -18,4 +18,16 @@ spec:
             {{- range .Values.mesh.allowList.ips }}
             - {{ . | quote }}
             {{- end }}
+    {{- if and (eq .Values.mesh.otlpGateway.enabled true) (gt (len .Values.mesh.otlpGateway.hosts) 0) }}
+    - to:
+      - operation:
+          hosts:
+          {{- range .Values.mesh.otlpGateway.hosts }}
+          - {{ . | quote }}
+          {{- end }}
+          paths:
+          - "/opentelemetry.proto.collector.trace.v1.*"
+          ports:
+          - "443"
+    {{- end }}
 {{- end }}
