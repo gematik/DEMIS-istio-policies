@@ -1,6 +1,8 @@
 <img align="right" width="250" height="47" src="https://raw.githubusercontent.com/gematik/gematik.github.io/master/Gematik_Logo_Flag_With_Background.png" /> <br />   
  
 # Release notes Istio-Policies
+## Release v2.14.0
+
 ## Release 2.13.0
 - added authorization policies for audit log services of fhir storage services writer and reader
 - removed chart version constraints
